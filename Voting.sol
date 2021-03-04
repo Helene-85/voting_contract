@@ -18,6 +18,7 @@ contract Voting is Ownable {
         string description;
         uint16 voteCount;
         address author; // Ajout
+        bool isActive;
     }
     
     struct Session {
@@ -77,9 +78,9 @@ contract Voting is Ownable {
         maxVoters = _maxVoters;
         maxProposals = _maxProposals;        
         sessionId = 1;
-        sessions[sessionId] = Session("NA", 0, 0, 0, 0, 0, Proposal("NA", 0, address(0)));
+        sessions[sessionId] = Session("NA", 0, 0, 0, 0, 0, Proposal("NA", 0, address(0), true));
         currentStatus = WorkflowStatus.RegisteringVoters;
-        proposals.push(Proposal('Blank Vote', 0, address(0))); //Ca evite aussi de s'ennuyer avec un id qui commence à 0 dans le tableau
+        proposals.push(Proposal('Blank Vote', 0, address(0), true)); //Ca evite aussi de s'ennuyer avec un id qui commence à 0 dans le tableau
     }
     
     //L'administrateur du vote enregistre une liste blanche d'électeurs identifiés par leur adresse Ethereum.
@@ -127,7 +128,7 @@ contract Voting is Ownable {
         require(sessions[sessionId].nbProposals < maxProposals, "Max proposals reached");
 
         voters[sessionId][msg.sender].hasProposed = true;
-        proposals.push(Proposal(_content, 0, msg.sender));
+        proposals.push(Proposal(_content, 0, msg.sender, true));
         sessions[sessionId].nbProposals ++;
         
         emit ProposalRegistered(sessions[sessionId].nbProposals);
@@ -154,27 +155,53 @@ contract Voting is Ownable {
     }    
     
     // Les électeurs inscrits votent pour leurs propositions préférées.    
-    
-    
-    
-    
+    function addVote(uint16 _votedProposalId) external {
+        require(voters[sessionId][msg.sender].isRegistered, "Voter can vote");
+        require(currentStatus == WorkflowStatus.VotingSessionStarted, "Time to vote!");
+        require(proposals[_votedProposalId].isActive);
+        
+        voters[sessionId][msg.sender].votedProposalId = _votedProposalId;
+        voters[sessionId][msg.sender].hasVoted = true;
+        proposals[_votedProposalId].voteCount ++;
+        
+        emit Voted (msg.sender, _votedProposalId);
+    }
+
 
     //L'administrateur du vote met fin à la session de vote.     
-     
-     
-     
+      function votingSessionEnded() external onlyOwner{
+        require(currentStatus == WorkflowStatus.ProposalsRegistrationEnded, "The end!");
+        
+        currentStatus = WorkflowStatus.VotingSessionEnded;
+        
+        emit WorkflowStatusChange(WorkflowStatus.VotingSessionStarted, WorkflowStatus.ProposalsRegistrationEnded);
+        emit VotingSessionEnded();        
+    }    
+    
      
      
     // L'administrateur du vote comptabilise les votes.
-    // Choisir la proposition gagnante, avec en cas d'égalité la proposition la plus vieille
     
+    // Récupérer nbAllVotes par proposal ????
+    
+    // Choisir la proposition gagnante, avec en cas d'égalité la proposition la plus vieille
+    function bestProposal() external onlyOwner{
+        require(currentStatus == WorkflowStatus.ProposalsRegistrationEnded, "The end!");
+        
+        currentStatus  = WorkflowStatus.VotesTallied;
+        
+        emit WorkflowStatusChange(WorkflowStatus.VotingSessionEnded, WorkflowStatus.VotesTallied);
+        emit VotesTallied();
+    }
     
     
      
     // Tout le monde peut vérifier les derniers détails de la proposition gagnante.
     // Un get sur les résultats de la session
-
-
+    function getDetailsAboutTheWinner() {
+        require(currentStatus == WorkflowStatus.VotesTallied, "Votes tallied!");
+        
+    }
 
 
     // Nous ferons tous les trois, la fonctionnalité qui relance une nouvelle session !!
