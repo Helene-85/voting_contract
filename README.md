@@ -36,25 +36,25 @@ En cours de création  🚀
 - Votre smart contract doit définir les structures de données suivantes : 
 ```
 struct Voter {
-bool isRegistered;
-bool hasVoted;
-uint votedProposalId;
+    bool isRegistered;
+    bool hasVoted;
+    uint votedProposalId;
 }
 
 struct Proposal {
-string description;
-uint voteCount;
+    string description;
+    uint voteCount;
 }
 ```
 - Votre smart contract doit définir une énumération qui gère les différents états d’un vote :
 ```
 enum WorkflowStatus {
-RegisteringVoters,
-ProposalsRegistrationStarted,
-ProposalsRegistrationEnded,
-VotingSessionStarted,
-VotingSessionEnded,
-VotesTallied
+    RegisteringVoters,
+    ProposalsRegistrationStarted,
+    ProposalsRegistrationEnded,
+    VotingSessionStarted,
+    VotingSessionEnded,
+    VotesTallied
 }
 ```
 - Votre smart contract doit définir un uint “winningProposalId” qui représente l’id du gagnant.
