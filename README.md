@@ -20,11 +20,25 @@ Le gagnant est déterminé à la majorité simple ; la proposition qui obtient l
 - L'administrateur du vote met fin à la session de vote.
 - L'administrateur du vote met fin à la session de vote.
 - L'administrateur du vote comptabilise les votes.
-- Tout le monde peut vérifier les derniers détails de la proposition gagnante.
+- Tout le monde peut vérifier les derniers détails de la proposition gagnante
+
+## FEATURE 2
+
+- Possibilité de désinscrire un voter (admin).
+- Possibilité de refuser une proposition (admin).
+- Possibilité de relancer une session de vote (admin).
+- Sauvegarde automatique des résultats de chaque session.
+- Consultation des résultats des sessions précédentes.
+- Possibilité de conserver les voters d'une session à l'autre.
+- Optimisation des index en uint16.
+- Optimisation de non-affectation des variables.
+- En cas d'égalité : priorisation automatique de la proposition la plus ancienne.
+- Ajout automatique, pour chaque session, du vote blanc.
+- Ajout de commentaires conforme aux automatisations de documentation.
 
 ### Progression
 
-En cours de création  🚀
+Livré  🚀
 
 ### Remix & Visual Studio Code  🖥️
 
