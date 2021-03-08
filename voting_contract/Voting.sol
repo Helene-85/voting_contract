@@ -9,7 +9,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
  * @author Hélène Bunel
  * @author Edouard Vahanian
  * @author Daniel Villa Monteiro
- * @notice We use uint16 size to index propoesals, voters and sessions (limit 65 536)
+ * @notice We use uint16 size to index proposals, voters and sessions (limit 65 536)
  */
 
 contract Voting is Ownable {
