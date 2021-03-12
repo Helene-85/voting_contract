@@ -93,7 +93,16 @@ contract Voting is Ownable {
         proposals.push(Proposal('Blank Vote', 0, address(0), true));
     }
     
-    
+    /**
+     * @dev Force change of status
+     * @param newStatus forced
+     */
+    function adminChangeStatus(uint8 newStatus) external onlyOwner{
+        // TODO Clean after testing
+        emit WorkflowStatusChange(WorkflowStatus(currentStatus), WorkflowStatus(newStatus));
+        currentStatus = WorkflowStatus(newStatus);
+    }
+
     /**
      * @dev Add a voter
      * @param _addressVoter address of new voter
